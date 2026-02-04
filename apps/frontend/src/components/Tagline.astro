@@ -1,0 +1,25 @@
+---
+/**
+ * Tagline.astro - Intermediate section before footer
+ * Zone A: Baroque (centered, serif, italic)
+ * Normal height, not full viewport
+ */
+
+import { FLUID_TYPE } from "../config/design";
+
+interface Props {
+  headline: string;
+  subline: string;
+}
+
+const { headline, subline } = Astro.props;
+const headlineSize = FLUID_TYPE.displaySmall;
+---
+
+<section
+  class="zone-baroque"
+  style="padding: 6rem 20%; border-top: 1px solid var(--color-ink); font-family: var(--font-italic);"
+>
+  <p class="display-text" style={`font-size: ${headlineSize}; margin-bottom: 1rem; font-family: inherit;`}>{headline}</p>
+  <p class="manifesto" style="font-size: 1rem; font-style: italic; font-family: inherit;">{subline}</p>
+</section>

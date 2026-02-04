@@ -1,0 +1,54 @@
+---
+/**
+ * Architecture.astro - Core architecture section
+ * Zone B: Brutalist (left-aligned, grid, borders)
+ */
+
+interface Thesis {
+  id: string;
+  title: string;
+  paragraphs: string[];
+}
+
+interface ArchitectureColumn {
+  label: string;
+  heading: string;
+  description: string;
+}
+
+interface Props {
+  thesis: Thesis;
+  columns: ArchitectureColumn[];
+}
+
+const { thesis, columns } = Astro.props;
+---
+
+<section class="zone-brutalist" id="architecture">
+  <div class="grid">
+    <!-- Architecture Overview -->
+    <div class="border-box" style="grid-column: span 12; display: grid; grid-template-columns: repeat(12, 1fr); gap: 0;">
+      <div style="grid-column: span 3; border-right: 1px solid var(--color-ink); padding: 2rem;">
+        <span class="label">DOCUMENT_ID</span>
+        <div style="margin-top: 1rem; font-size: 0.85rem;">{thesis.id}</div>
+      </div>
+      <div style="grid-column: span 9; padding: 2rem;">
+        <span class="label" style="display: block; margin-bottom: 1rem;">{thesis.title}</span>
+        {thesis.paragraphs.map((para) => (
+          <p style="max-width: 60ch; margin-bottom: 1rem;">{para}</p>
+        ))}
+      </div>
+    </div>
+
+    <!-- Three Column Grid for Components -->
+    {columns.map((col) => (
+      <div class="border-box architecture-card">
+        <span class="label">{col.label}</span>
+        <div style="margin-top: auto;">
+          <div class="architecture-card-heading">{col.heading}</div>
+          <div class="card-text" style="font-size: calc(var(--font-size-card-text) * 1.125);">{col.description}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

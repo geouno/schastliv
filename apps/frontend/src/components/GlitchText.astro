@@ -1,0 +1,131 @@
+ ---
+/**
+ * GlitchText.astro - GPU-accelerated text morph using Three.js
+ * Morphs between three text states with a glitch/chunk flip effect on hover
+ */
+
+import type { GlitchTextOptions } from '../lib/glitch-text';
+
+type Props = GlitchTextOptions;
+
+const props = Astro.props satisfies Props;
+const { textA, textB, textC, tiles, tileDimensions } = props;
+---
+
+<div
+  class="glitch-text-container"
+  data-text-a={textA}
+  data-text-b={textB}
+  data-text-c={textC}
+  data-tiles={tiles ? `${tiles.x};${tiles.y}` : undefined}
+  data-tile-dimensions={tileDimensions ? `${tileDimensions.x};${tileDimensions.y}` : undefined}
+>
+  <canvas class="glitch-text-canvas"></canvas>
+</div>
+
+<script>
+  import { GlitchText } from '../lib/glitch-text';
+  import type { GlitchTextOptions } from '../lib/glitch-text';
+
+  const initializedSymbol = Symbol('glitchTextInitialized');
+  const instanceMap = new WeakMap<HTMLElement, {
+    glitchText: GlitchText;
+    resizeObserver: ResizeObserver;
+    cleanup: () => void;
+  }>();
+
+  async function initGlitchText() {
+    await document.fonts.ready;
+
+    const containers = document.querySelectorAll<HTMLElement>('.glitch-text-container');
+
+    containers.forEach(container => {
+      if ((container as any)[initializedSymbol]) return;
+
+      const canvas = container.querySelector('.glitch-text-canvas') as HTMLCanvasElement;
+      if (!canvas) return;
+
+      const dataset = (container as HTMLElement).dataset;
+      const { textA, textB, textC, tiles, tileDimensions } = dataset;
+
+      if (!textA || !textB || !textC) {
+        console.warn('GlitchText: Missing text data');
+        return;
+      }
+
+      const options: GlitchTextOptions = { textA, textB, textC };
+
+      if (tiles) {
+        const [x, y] = tiles.split(';').map(Number);
+        if (!Number.isNaN(x) && !Number.isNaN(y) && x > 0 && y > 0) {
+          options.tiles = { x, y };
+        }
+      }
+
+      if (tileDimensions) {
+        const [x, y] = tileDimensions.split(';').map(Number);
+        if (!Number.isNaN(x) && !Number.isNaN(y) && x > 0 && y > 0) {
+          options.tileDimensions = { x, y };
+        }
+      }
+
+      const glitchText = new GlitchText(canvas, options);
+
+      const handleMouseEnter = () => glitchText.setHover(true);
+      const handleMouseLeave = () => glitchText.setHover(false);
+
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const { width, height } = entry.contentRect;
+          glitchText.resize(width, height);
+        }
+      });
+
+      const cleanup = () => {
+        container.removeEventListener('mouseenter', handleMouseEnter);
+        container.removeEventListener('mouseleave', handleMouseLeave);
+        resizeObserver.disconnect();
+        glitchText.destroy();
+        delete (container as any)[initializedSymbol];
+        instanceMap.delete(container);
+      };
+
+      container.addEventListener('mouseenter', handleMouseEnter);
+      container.addEventListener('mouseleave', handleMouseLeave);
+      resizeObserver.observe(container);
+
+      (container as any)[initializedSymbol] = true;
+      instanceMap.set(container, { glitchText, resizeObserver, cleanup });
+    });
+  }
+
+  const cleanupAll = () => {
+    const containers = document.querySelectorAll<HTMLElement>('.glitch-text-container');
+    containers.forEach(container => {
+      const instance = instanceMap.get(container);
+      instance?.cleanup();
+    });
+  };
+
+  initGlitchText();
+  document.addEventListener('astro:page-load', initGlitchText);
+  document.addEventListener('astro:after-swap', cleanupAll);
+</script>
+
+<style>
+  .glitch-text-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glitch-text-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>

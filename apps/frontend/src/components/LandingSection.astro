@@ -1,0 +1,20 @@
+---
+/**
+ * LandingSection.astro - Wrapper for hero + marquee to ensure both are visible in viewport
+ * Takes a slot for the main content (Hero) and a slot for the marquee transition
+ */
+
+import { getLandingSectionHeight } from "../config/design";
+
+interface Props {
+  margin?: number;
+}
+
+const { margin = 1.5 } = Astro.props;
+---
+
+<div
+  style={`display: flex; flex-direction: column; height: ${getLandingSectionHeight(margin)};`}
+>
+  <slot />
+</div>

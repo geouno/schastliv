@@ -1,0 +1,259 @@
+@import "tailwindcss";
+@import "@fontsource/cormorant-garamond/400-italic.css";
+@import "@fontsource/fraunces/400-italic.css";
+@import "@fontsource/space-mono/400.css";
+@import "@fontsource/courier-prime/400.css";
+@import "@fontsource/courier-prime/400-italic.css";
+
+:root {
+  --color-paper: #e8e8e8;
+  --color-ink: #1e1e1e;
+  --color-border-muted: #1e1e1e44;
+  --color-highlight: hsl(222deg, 80%, 70%);
+  --font-hero: "Cormorant Garamond", serif;
+  --font-italic: "Fraunces", serif;
+  --font-label: "Space Mono", monospace;
+  --font-body: "Courier Prime", monospace;
+  --font-size-card-label: 0.8rem;
+  --font-size-card-text: 0.95rem;
+  --line-height-card-text: 1.6;
+  --border-width: 1px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height, 72px) + 1.5rem);
+}
+
+/* Zone A: The Stage (Baroque) */
+.zone-baroque {
+  text-align: center;
+  padding-block: clamp(3rem, 8vh, 6rem);
+  padding-inline: clamp(1.5rem, 8vw, 20%);
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.zone-baroque .display-text {
+  font-size: 4rem;
+  line-height: 1.1;
+}
+
+.zone-baroque .manifesto {
+  font-size: 1.25rem;
+  font-family: var(--font-body);
+  font-style: normal;
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+.zone-baroque .dot-matrix {
+  position: absolute;
+  opacity: 0.2;
+}
+
+/* Zone B: The Machine (Brutalist) */
+.zone-brutalist {
+  text-align: left;
+  border-top: var(--border-width) solid var(--color-ink);
+  border-bottom: var(--border-width) solid var(--color-ink);
+  padding: 0;
+}
+
+.zone-brutalist .grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+}
+
+.zone-brutalist .label {
+  font-family: var(--font-label);
+  font-size: var(--font-size-card-label);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+}
+
+.zone-brutalist .card-text {
+  font-size: var(--font-size-card-text);
+  line-height: var(--line-height-card-text);
+}
+
+.zone-brutalist .border-box {
+  border: var(--border-width) solid var(--color-ink);
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.zone-brutalist .border-box * {
+  text-align: left;
+}
+
+.zone-brutalist .border-box:hover {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.zone-brutalist .border-box:hover * {
+  color: var(--color-paper);
+}
+
+/* The Cut: Transition between zones */
+.cut {
+  padding: 1.5rem 0;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Patterns */
+.hatching {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    var(--color-ink) 2px,
+    var(--color-ink) 3px
+  );
+  opacity: 0.05;
+}
+
+.dot-matrix-pattern {
+  background-image: radial-gradient(circle, var(--color-ink) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+}
+
+/* Buttons and Inputs */
+.brutalist-input {
+  width: 100%;
+  padding: 1rem;
+  border: var(--border-width) solid var(--color-ink);
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: transparent;
+  color: var(--color-ink);
+  appearance: none;
+}
+
+.brutalist-input:focus {
+  outline: none;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.brutalist-button {
+  padding: 1rem 2rem;
+  border: var(--border-width) solid var(--color-ink);
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.brutalist-button:hover {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* Links */
+.baroque-link {
+  font-family: var(--font-body);
+  font-style: normal;
+  text-decoration: none;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-ink);
+  line-height: 1;
+  padding-top: 0.25rem;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.baroque-link:hover {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-style: italic;
+}
+
+.brutalist-link {
+  font-family: var(--font-label);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  color: var(--color-ink);
+  border: var(--border-width) solid var(--color-ink);
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.brutalist-link:hover {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-style: italic;
+}
+
+.architecture-card {
+  grid-column: span 4;
+  min-height: 400px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.architecture-card-heading {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+@media (max-width: 900px) {
+  .architecture-card {
+    grid-column: span 12;
+    min-height: auto;
+  }
+
+  .architecture-card-heading {
+    font-size: clamp(2rem, 10vw, 3rem);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}

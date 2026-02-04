@@ -1,0 +1,21 @@
+---
+import "../styles/global.css";
+import { designTokens } from "../config/design";
+
+const cssVarStyle = Object.entries(designTokens)
+  .map(([key, value]) => `${key}:${value}`)
+  .join(";");
+---
+
+<html lang="en" style={cssVarStyle}>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Schastliv</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

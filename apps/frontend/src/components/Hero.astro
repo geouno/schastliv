@@ -1,0 +1,39 @@
+---
+/**
+ * Hero.astro - Main hero section
+ * Zone A: Baroque (centered, serif, italic, large whitespace)
+ */
+
+import { FLUID_TYPE } from "../config/design";
+
+interface Props {
+  title: string;
+  subtitle: string;
+  tagline: string;
+}
+
+const { title, subtitle, tagline } = Astro.props;
+const taglineLines = tagline.split("\n");
+const heroTitleSize = FLUID_TYPE.heroTitle;
+const heroSubtitleSize = FLUID_TYPE.heroSubtitle;
+---
+
+<section
+  class="zone-baroque"
+  style="display: flex; flex-direction: column; justify-content: center; position: relative; flex: 1; min-height: 0; overflow: hidden;"
+>
+  <h1 class="display-text" style="margin-bottom: 2rem;">
+    <span style={`font-size: ${heroTitleSize}; line-height: 1.1; font-family: var(--font-hero);`}>{title}</span><br>
+    <span style={`font-size: ${heroSubtitleSize}; line-height: 1.1; font-family: var(--font-hero);`}>{subtitle}</span>
+  </h1>
+  <p class="manifesto" style="margin-top: 2rem;">
+    {taglineLines.map((line) => (
+      <>{line}<br /></>
+    ))}
+  </p>
+
+  <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap;">
+    <a href="#architecture" class="brutalist-link">How it works</a>
+    <a href="#demo" class="brutalist-link">See demo</a>
+  </div>
+</section>

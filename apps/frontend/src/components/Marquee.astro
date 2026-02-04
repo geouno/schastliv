@@ -1,0 +1,110 @@
+---
+/**
+ * Marquee.astro - Scrolling text transition between zones
+ * The Cut: visual palette cleanser
+ *
+ * Production-grade marquee:
+ * - Uses JS to calculate duration based on pixel width for consistent px/s speed
+ * - Duplicates content enough times to fill viewport + buffer
+ * - Uses negative animation delay for instant start (no jump)
+ * - Hardware accelerated (transform3d)
+ */
+
+interface Props {
+  items: string[];
+  separator?: string;
+  gap?: string; // CSS length for spacing between items (around separator)
+  speed?: number; // Pixels per second (default: 50)
+}
+
+const { items, separator = "///", gap = "2rem", speed = 125 } = Astro.props;
+
+const REPETITIONS = 10;
+---
+
+<div class="cut marquee-container" style="overflow: hidden; user-select: none;">
+  <!--
+    We render multiple copies of the content track.
+    We'll measure width in JS and set the animation duration
+    so speed is constant regardless of content length or viewport width.
+  -->
+  <div class="marquee-track" data-speed={speed} data-repetitions={REPETITIONS}>
+    {new Array(REPETITIONS).fill(0).map(() => (
+      <div class="marquee-content">
+        {items.map((item) => (
+          <div class="marquee-item">
+            <span>{item}</span>
+            <span class="separator" style={`margin: 0 ${gap};`}>{separator}</span>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  // Calculate duration based on width to ensure constant speed (px/s)
+  const initMarquee = () => {
+    const tracks = document.querySelectorAll<HTMLElement>('.marquee-track');
+
+    tracks.forEach(track => {
+      const content = track.querySelector('.marquee-content') as HTMLElement;
+      if (!content) return;
+
+      const repetitions = parseInt(track.dataset.repetitions || '10');
+      // Get the width of one full content cycle
+      const contentWidth = content.offsetWidth;
+      const speed = parseInt(track.dataset.speed || '50');
+
+      // Time = Distance / Speed
+      // We base the duration on the TOTAL track width to account for all repetitions
+      const duration = contentWidth / speed;
+
+      track.style.setProperty('--marquee-duration', `${duration}s`);
+      track.classList.add('animate');
+    });
+  };
+
+  // Run on load and view transitions
+  document.addEventListener('astro:page-load', initMarquee);
+  document.addEventListener('DOMContentLoaded', initMarquee);
+</script>
+
+<style define:vars={{ repetitions: REPETITIONS }}>
+  .marquee-container {
+    width: 100%;
+    /* Ensure it doesn't collapse */
+    min-height: 2em;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: fit-content;
+    will-change: transform;
+    /* Default paused until JS calculates correct speed */
+  }
+
+  .marquee-track.animate {
+    animation: marquee var(--marquee-duration, 20s) linear infinite;
+  }
+
+  .marquee-content {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+  }
+
+  @keyframes marquee {
+    0% { transform: translate3d(0, 0, 0); }
+    /*
+      We move by exactly one content width (1/REPETITIONS of total width) to create a seamless loop.
+      Formula: -100% / number_of_repetitions
+    */
+    100% { transform: translate3d(calc(-100% / var(--repetitions)), 0, 0); }
+  }
+</style>

@@ -1,0 +1,38 @@
+ ---
+/**
+ * Footer.astro - Full viewport closing footer with glitch morph effect
+ * Zone A: Baroque (centered, serif, italic)
+ * Morphs between three text states on hover using GPU-accelerated Three.js
+ */
+
+import { getFooterHeight } from '../config/design';
+import GlitchText from './GlitchText.astro';
+
+interface Props {
+  textA: string;
+  textB: string;
+  textC: string;
+}
+
+const { textA, textB, textC } = Astro.props;
+---
+
+<footer
+  class="zone-baroque"
+  data-text-a={textA}
+  data-text-b={textB}
+  data-text-c={textC}
+  style={`border-top: 1px solid var(--color-ink); height: ${getFooterHeight()}; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; padding: 0;`}
+>
+  <div class="footer-content">
+    <GlitchText textA={textA} textB={textB} textC={textC} />
+  </div>
+</footer>
+
+<style>
+  .footer-content {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+

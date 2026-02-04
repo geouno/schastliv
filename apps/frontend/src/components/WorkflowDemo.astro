@@ -1,0 +1,55 @@
+---
+/**
+ * WorkflowDemo.astro - Demo workflow section
+ * Zone B: Brutalist (left-aligned, grid, borders)
+ */
+
+interface WorkflowStep {
+  id: string;
+  action: string;
+  description: string;
+}
+
+interface WorkflowOutput {
+  video_id: string;
+  timestamps: Array<{ time: string; title: string; context: string }>;
+}
+
+interface UseCase {
+  label: string;
+  title: string;
+}
+
+interface Props {
+  useCase: UseCase;
+  steps: WorkflowStep[];
+  output: WorkflowOutput;
+}
+
+const { useCase, steps, output } = Astro.props;
+---
+
+<section class="zone-brutalist" id="demo">
+  <div class="grid">
+    <div class="border-box" style="grid-column: span 12;">
+      <span class="label">{useCase.label}</span>
+      <h2 style="font-family: var(--font-italic); font-style: italic; font-size: 2rem; margin: 1rem 0;">{useCase.title}</h2>
+    </div>
+
+    {steps.map((step) => (
+      <div class="border-box" style="grid-column: span 3; border-bottom: 1px solid var(--color-ink);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <span class="label">{step.id}</span>
+          <span class="label">{step.action}</span>
+        </div>
+        <div class="card-text">{step.description}</div>
+      </div>
+    ))}
+
+    <!-- Output Preview -->
+    <div class="border-box" style="grid-column: span 12; background-color: var(--color-ink); color: var(--color-paper);">
+      <span class="label" style="color: var(--color-paper);">OUTPUT_FORMAT</span>
+      <pre style="margin-top: 1rem; font-size: 0.85rem; overflow-x: auto;">{JSON.stringify(output, null, 2)}</pre>
+    </div>
+  </div>
+</section>
