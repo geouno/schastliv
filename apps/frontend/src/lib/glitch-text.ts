@@ -16,8 +16,10 @@ export interface GlitchTextConfig {
   resizeDebounceMs: number;
 }
 
+export const DEFAULT_FONT_FAMILY = "Cormorant Garamond";
+
 const DEFAULTS = {
-  fontFamily: "Cormorant Garamond",
+  fontFamily: DEFAULT_FONT_FAMILY,
   tileDimensions: { x: 8, y: 8 },
   initialWaitDuration: 0.2,
   allTilesFlipDuration: 0.5,

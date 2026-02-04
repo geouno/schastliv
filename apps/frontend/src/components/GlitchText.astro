@@ -24,7 +24,7 @@ const { textA, textB, textC, tiles, tileDimensions } = props;
 </div>
 
 <script>
-  import { GlitchText } from '../lib/glitch-text';
+  import { GlitchText, DEFAULT_FONT_FAMILY } from '../lib/glitch-text';
   import type { GlitchTextOptions } from '../lib/glitch-text';
 
   const initializedSymbol = Symbol('glitchTextInitialized');
@@ -34,10 +34,37 @@ const { textA, textB, textC, tiles, tileDimensions } = props;
     cleanup: () => void;
   }>();
 
-  async function initGlitchText() {
-    await document.fonts.ready;
+  const GLITCH_FONT_FAMILY = DEFAULT_FONT_FAMILY;
+  const GLITCH_FONT_DESCRIPTOR = `italic 400 96px "${GLITCH_FONT_FAMILY}"`;
 
+  const collectFontSamples = (containers: NodeListOf<HTMLElement>) => {
+    const samples = new Set<string>();
+    containers.forEach(container => {
+      const { textA, textB, textC } = container.dataset;
+      if (textA) samples.add(textA);
+      if (textB) samples.add(textB);
+      if (textC) samples.add(textC);
+    });
+    return [...samples];
+  };
+
+  const loadGlitchFonts = async (containers: NodeListOf<HTMLElement>) => {
+    if (!('fonts' in document) || !document.fonts.load) return;
+
+    const samples = collectFontSamples(containers);
+    const loads = samples.length
+      ? samples.map(sample => document.fonts.load(GLITCH_FONT_DESCRIPTOR, sample))
+      : [document.fonts.load(GLITCH_FONT_DESCRIPTOR)];
+
+    await Promise.all(loads);
+    await document.fonts.ready;
+  };
+
+  async function initGlitchText() {
     const containers = document.querySelectorAll<HTMLElement>('.glitch-text-container');
+    if (!containers.length) return;
+
+    await loadGlitchFonts(containers);
 
     containers.forEach(container => {
       if ((container as any)[initializedSymbol]) return;
