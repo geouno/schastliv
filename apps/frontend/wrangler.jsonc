@@ -9,5 +9,15 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "routes": [
+    {
+      "pattern": "schastliv.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.schastliv.com",
+      "custom_domain": true
+    }
+  ]
 }
