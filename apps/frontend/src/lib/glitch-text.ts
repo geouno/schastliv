@@ -494,7 +494,7 @@ export class GlitchText {
 
     if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
 
-    this.resizeTimeout = setTimeout(() => {
+    this.resizeTimeout = window.setTimeout(() => {
       if (this.useTileDimensions) {
         this.tiles = this.calculateTiles(width, height);
         this.uniforms.uTiles.value.set(this.tiles.x, this.tiles.y);
